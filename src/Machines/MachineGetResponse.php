@@ -7,24 +7,24 @@ namespace Dedalus\Machines;
 use Dedalus\Core\Attributes\Required;
 use Dedalus\Core\Concerns\SdkModel;
 use Dedalus\Core\Contracts\BaseModel;
-use Dedalus\Machines\MachineListItem\DesiredState;
-use Dedalus\Machines\MachineListItem\Phase;
+use Dedalus\Machines\MachineGetResponse\DesiredState;
 
 /**
- * @phpstan-type MachineListItemShape = array{
+ * @phpstan-import-type LifecycleStatusShape from \Dedalus\Machines\LifecycleStatus
+ *
+ * @phpstan-type MachineGetResponseShape = array{
  *   autosleepSeconds: int,
- *   createdAt: \DateTimeInterface,
  *   desiredState: DesiredState|value-of<DesiredState>,
  *   machineID: string,
  *   memoryMiB: int,
- *   phase: Phase|value-of<Phase>,
+ *   status: LifecycleStatus|LifecycleStatusShape,
  *   storageGiB: int,
  *   vcpu: float,
  * }
  */
-final class MachineListItem implements BaseModel
+final class MachineGetResponse implements BaseModel
 {
-    /** @use SdkModel<MachineListItemShape> */
+    /** @use SdkModel<MachineGetResponseShape> */
     use SdkModel;
 
     /**
@@ -32,9 +32,6 @@ final class MachineListItem implements BaseModel
      */
     #[Required('autosleep_seconds')]
     public int $autosleepSeconds;
-
-    #[Required('created_at')]
-    public \DateTimeInterface $createdAt;
 
     /** @var value-of<DesiredState> $desiredState */
     #[Required('desired_state', enum: DesiredState::class)]
@@ -49,9 +46,8 @@ final class MachineListItem implements BaseModel
     #[Required('memory_mib')]
     public int $memoryMiB;
 
-    /** @var value-of<Phase> $phase */
-    #[Required(enum: Phase::class)]
-    public string $phase;
+    #[Required]
+    public LifecycleStatus $status;
 
     #[Required('storage_gib')]
     public int $storageGiB;
@@ -63,17 +59,16 @@ final class MachineListItem implements BaseModel
     public float $vcpu;
 
     /**
-     * `new MachineListItem()` is missing required properties by the API.
+     * `new MachineGetResponse()` is missing required properties by the API.
      *
      * To enforce required parameters use
      * ```
-     * MachineListItem::with(
+     * MachineGetResponse::with(
      *   autosleepSeconds: ...,
-     *   createdAt: ...,
      *   desiredState: ...,
      *   machineID: ...,
      *   memoryMiB: ...,
-     *   phase: ...,
+     *   status: ...,
      *   storageGiB: ...,
      *   vcpu: ...,
      * )
@@ -82,13 +77,12 @@ final class MachineListItem implements BaseModel
      * Otherwise ensure the following setters are called
      *
      * ```
-     * (new MachineListItem)
+     * (new MachineGetResponse)
      *   ->withAutosleepSeconds(...)
-     *   ->withCreatedAt(...)
      *   ->withDesiredState(...)
      *   ->withMachineID(...)
      *   ->withMemoryMiB(...)
-     *   ->withPhase(...)
+     *   ->withStatus(...)
      *   ->withStorageGiB(...)
      *   ->withVCPU(...)
      * ```
@@ -104,26 +98,24 @@ final class MachineListItem implements BaseModel
      * You must use named parameters to construct any parameters with a default value.
      *
      * @param DesiredState|value-of<DesiredState> $desiredState
-     * @param Phase|value-of<Phase> $phase
+     * @param LifecycleStatus|LifecycleStatusShape $status
      */
     public static function with(
         int $autosleepSeconds,
-        \DateTimeInterface $createdAt,
         DesiredState|string $desiredState,
         string $machineID,
         int $memoryMiB,
-        Phase|string $phase,
+        LifecycleStatus|array $status,
         int $storageGiB,
         float $vcpu,
     ): self {
         $self = new self;
 
         $self['autosleepSeconds'] = $autosleepSeconds;
-        $self['createdAt'] = $createdAt;
         $self['desiredState'] = $desiredState;
         $self['machineID'] = $machineID;
         $self['memoryMiB'] = $memoryMiB;
-        $self['phase'] = $phase;
+        $self['status'] = $status;
         $self['storageGiB'] = $storageGiB;
         $self['vcpu'] = $vcpu;
 
@@ -137,14 +129,6 @@ final class MachineListItem implements BaseModel
     {
         $self = clone $this;
         $self['autosleepSeconds'] = $autosleepSeconds;
-
-        return $self;
-    }
-
-    public function withCreatedAt(\DateTimeInterface $createdAt): self
-    {
-        $self = clone $this;
-        $self['createdAt'] = $createdAt;
 
         return $self;
     }
@@ -180,12 +164,12 @@ final class MachineListItem implements BaseModel
     }
 
     /**
-     * @param Phase|value-of<Phase> $phase
+     * @param LifecycleStatus|LifecycleStatusShape $status
      */
-    public function withPhase(Phase|string $phase): self
+    public function withStatus(LifecycleStatus|array $status): self
     {
         $self = clone $this;
-        $self['phase'] = $phase;
+        $self['status'] = $status;
 
         return $self;
     }

@@ -49,37 +49,10 @@ var_dump($machine->machine_id);
 
 ### Value Objects
 
-It is recommended to use the static `with` constructor `TerminalInputEvent::with(data: 'U3RhaW5sZXNzIHJvY2tz', ...)`
+It is recommended to use the static `with` constructor `Dog::with(name: "Joey")`
 and named parameters to initialize value objects.
 
-However, builders are also provided `(new TerminalInputEvent)->withData('U3RhaW5sZXNzIHJvY2tz')`.
-
-### Streaming
-
-We provide support for streaming responses using Server-Sent Events (SSE).
-
-```php
-<?php
-
-use Dedalus\Client;
-
-$client = new Client(apiKey: getenv('DEDALUS_API_KEY') ?: 'My API Key');
-
-$stream = $client->machines->watchStream();
-
-foreach ($stream as $machine) {
-  var_dump($machine);
-}
-```
-
-Streaming requests are dispatched through a separate `streamingTransporter` PSR-18 HTTP client. When unset, the SDK uses the configured `transporter`.
-Some PSR-18 HTTP clients will by default try to read the entire response, so you may need to specify a streaming capable implementation.
-
-```php
-$client = new Dedalus\Client(
-    requestOptions: Dedalus\RequestOptions::with(streamingTransporter: $myStreamingClient),
-);
-```
+However, builders are also provided `(new Dog)->withName("Joey")`.
 
 ### Pagination
 
@@ -120,9 +93,7 @@ use Dedalus\Core\Exceptions\RateLimitException;
 use Dedalus\Core\Exceptions\APIStatusException;
 
 try {
-  $machine = $client->machines->create(
-    memoryMiB: 2048, storageGiB: 10, vcpu: 1
-  );
+  $machine = $client->machines->create();
 } catch (APIConnectionException $e) {
   echo "The server could not be reached", PHP_EOL;
   var_dump($e->getPrevious());

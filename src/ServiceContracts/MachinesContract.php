@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Dedalus\ServiceContracts;
 
-use Dedalus\Core\Contracts\BaseStream;
 use Dedalus\Core\Exceptions\APIException;
 use Dedalus\CursorPage;
 use Dedalus\Machines\Machine;
+use Dedalus\Machines\MachineGetResponse;
 use Dedalus\Machines\MachineListItem;
 use Dedalus\RequestOptions;
 
@@ -19,19 +19,19 @@ interface MachinesContract
     /**
      * @api
      *
+     * @param string $autosleep Idle window before autosleep. Accepts fixed duration units like 30s, 30m, 2h, 7d3h4s, or 1w3d, raw seconds ("1800"), or never to disable.
      * @param int $memoryMiB memory in MiB
      * @param int $storageGiB storage in GiB
      * @param float $vcpu CPU in vCPUs
-     * @param string $autosleep Idle window before autosleep. Accepts fixed duration units like 30s, 30m, 2h, 7d3h4s, or 1w3d, raw seconds ("1800"), or never to disable.
      * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function create(
-        int $memoryMiB,
-        int $storageGiB,
-        float $vcpu,
-        ?string $autosleep = null,
+        string $autosleep = '300s',
+        int $memoryMiB = 4096,
+        int $storageGiB = 10,
+        float $vcpu = 1,
         RequestOptions|array|null $requestOptions = null,
     ): Machine;
 
@@ -45,7 +45,7 @@ interface MachinesContract
     public function retrieve(
         string $machineID,
         RequestOptions|array|null $requestOptions = null
-    ): Machine;
+    ): MachineGetResponse;
 
     /**
      * @api
@@ -118,21 +118,4 @@ interface MachinesContract
         string $machineID,
         RequestOptions|array|null $requestOptions = null
     ): Machine;
-
-    /**
-     * @api
-     *
-     * @param string $machineID path param: Machine identifier
-     * @param string $lastEventID header param: Optional resourceVersion bookmark used to resume a previous stream
-     * @param RequestOpts|null $requestOptions
-     *
-     * @return BaseStream<Machine>
-     *
-     * @throws APIException
-     */
-    public function watchStream(
-        string $machineID,
-        ?string $lastEventID = null,
-        RequestOptions|array|null $requestOptions = null,
-    ): BaseStream;
 }

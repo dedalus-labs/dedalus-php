@@ -8,16 +8,15 @@ use Dedalus\Core\Attributes\Required;
 use Dedalus\Core\Concerns\SdkModel;
 use Dedalus\Core\Contracts\BaseModel;
 use Dedalus\Machines\Machine\DesiredState;
+use Dedalus\Machines\Machine\Phase;
 
 /**
- * @phpstan-import-type LifecycleStatusShape from \Dedalus\Machines\LifecycleStatus
- *
  * @phpstan-type MachineShape = array{
  *   autosleepSeconds: int,
  *   desiredState: DesiredState|value-of<DesiredState>,
  *   machineID: string,
  *   memoryMiB: int,
- *   status: LifecycleStatus|LifecycleStatusShape,
+ *   phase: Phase|value-of<Phase>,
  *   storageGiB: int,
  *   vcpu: float,
  * }
@@ -46,8 +45,9 @@ final class Machine implements BaseModel
     #[Required('memory_mib')]
     public int $memoryMiB;
 
-    #[Required]
-    public LifecycleStatus $status;
+    /** @var value-of<Phase> $phase */
+    #[Required(enum: Phase::class)]
+    public string $phase;
 
     #[Required('storage_gib')]
     public int $storageGiB;
@@ -68,7 +68,7 @@ final class Machine implements BaseModel
      *   desiredState: ...,
      *   machineID: ...,
      *   memoryMiB: ...,
-     *   status: ...,
+     *   phase: ...,
      *   storageGiB: ...,
      *   vcpu: ...,
      * )
@@ -82,7 +82,7 @@ final class Machine implements BaseModel
      *   ->withDesiredState(...)
      *   ->withMachineID(...)
      *   ->withMemoryMiB(...)
-     *   ->withStatus(...)
+     *   ->withPhase(...)
      *   ->withStorageGiB(...)
      *   ->withVCPU(...)
      * ```
@@ -98,14 +98,14 @@ final class Machine implements BaseModel
      * You must use named parameters to construct any parameters with a default value.
      *
      * @param DesiredState|value-of<DesiredState> $desiredState
-     * @param LifecycleStatus|LifecycleStatusShape $status
+     * @param Phase|value-of<Phase> $phase
      */
     public static function with(
         int $autosleepSeconds,
         DesiredState|string $desiredState,
         string $machineID,
         int $memoryMiB,
-        LifecycleStatus|array $status,
+        Phase|string $phase,
         int $storageGiB,
         float $vcpu,
     ): self {
@@ -115,7 +115,7 @@ final class Machine implements BaseModel
         $self['desiredState'] = $desiredState;
         $self['machineID'] = $machineID;
         $self['memoryMiB'] = $memoryMiB;
-        $self['status'] = $status;
+        $self['phase'] = $phase;
         $self['storageGiB'] = $storageGiB;
         $self['vcpu'] = $vcpu;
 
@@ -164,12 +164,12 @@ final class Machine implements BaseModel
     }
 
     /**
-     * @param LifecycleStatus|LifecycleStatusShape $status
+     * @param Phase|value-of<Phase> $phase
      */
-    public function withStatus(LifecycleStatus|array $status): self
+    public function withPhase(Phase|string $phase): self
     {
         $self = clone $this;
-        $self['status'] = $status;
+        $self['phase'] = $phase;
 
         return $self;
     }
