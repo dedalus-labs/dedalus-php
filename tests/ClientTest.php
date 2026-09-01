@@ -32,7 +32,7 @@ class ClientTest extends TestCase
             requestOptions: ['transporter' => $transporter],
         );
 
-        $client->machines->create(memoryMiB: 0, storageGiB: 0, vcpu: 0);
+        $client->machines->create();
 
         $this->assertNotFalse($requested = $transporter->getRequests()[0] ?? false);
 

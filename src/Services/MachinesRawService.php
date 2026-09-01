@@ -6,23 +6,20 @@ namespace Dedalus\Services;
 
 use Dedalus\Client;
 use Dedalus\Core\Contracts\BaseResponse;
-use Dedalus\Core\Contracts\BaseStream;
 use Dedalus\Core\Exceptions\APIException;
-use Dedalus\Core\Util;
 use Dedalus\CursorPage;
 use Dedalus\Machines\Machine;
 use Dedalus\Machines\MachineCreateParams;
 use Dedalus\Machines\MachineDeleteParams;
+use Dedalus\Machines\MachineGetResponse;
 use Dedalus\Machines\MachineListItem;
 use Dedalus\Machines\MachineListParams;
 use Dedalus\Machines\MachineRetrieveParams;
 use Dedalus\Machines\MachineSleepParams;
 use Dedalus\Machines\MachineUpdateParams;
 use Dedalus\Machines\MachineWakeParams;
-use Dedalus\Machines\MachineWatchParams;
 use Dedalus\RequestOptions;
 use Dedalus\ServiceContracts\MachinesRawContract;
-use Dedalus\SSEStream;
 
 /**
  * @phpstan-import-type RequestOpts from \Dedalus\RequestOptions
@@ -41,7 +38,7 @@ final class MachinesRawService implements MachinesRawContract
      * Create machine
      *
      * @param array{
-     *   memoryMiB: int, storageGiB: int, vcpu: float, autosleep?: string
+     *   autosleep?: string, memoryMiB?: int, storageGiB?: int, vcpu?: float
      * }|MachineCreateParams $params
      * @param RequestOpts|null $requestOptions
      *
@@ -76,7 +73,7 @@ final class MachinesRawService implements MachinesRawContract
      * @param array{machineID: string}|MachineRetrieveParams $params
      * @param RequestOpts|null $requestOptions
      *
-     * @return BaseResponse<Machine>
+     * @return BaseResponse<MachineGetResponse>
      *
      * @throws APIException
      */
@@ -96,7 +93,7 @@ final class MachinesRawService implements MachinesRawContract
             method: 'get',
             path: ['v1/machines/%1$s', $machineID],
             options: $options,
-            convert: Machine::class,
+            convert: MachineGetResponse::class,
         );
     }
 
@@ -264,41 +261,6 @@ final class MachinesRawService implements MachinesRawContract
             path: ['v1/machines/%1$s/wake', $machineID],
             options: $options,
             convert: Machine::class,
-        );
-    }
-
-    /**
-     * @api
-     *
-     * @param array{machineID: string, lastEventID?: string}|MachineWatchParams $params
-     * @param RequestOpts|null $requestOptions
-     *
-     * @return BaseResponse<BaseStream<Machine>>
-     *
-     * @throws APIException
-     */
-    public function watchStream(
-        array|MachineWatchParams $params,
-        RequestOptions|array|null $requestOptions = null,
-    ): BaseResponse {
-        [$parsed, $options] = MachineWatchParams::parseRequest(
-            $params,
-            $requestOptions,
-        );
-        $machineID = $parsed['machineID'];
-        unset($parsed['machineID']);
-
-        // @phpstan-ignore-next-line return.type
-        return $this->client->request(
-            method: 'get',
-            path: ['v1/machines/%1$s/status/stream', $machineID],
-            headers: Util::array_transform_keys(
-                ['Accept' => 'text/event-stream', ...$parsed],
-                ['lastEventID' => 'Last-Event-ID'],
-            ),
-            options: $options,
-            convert: Machine::class,
-            stream: SSEStream::class,
         );
     }
 }
