@@ -34,7 +34,7 @@ final class ExecutionsTest extends TestCase
     public function testCreate(): void
     {
         $result = $this->client->machines->executions->create(
-            machineID: 'dm-3',
+            machineID: 'dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c',
             command: ['string']
         );
 
@@ -46,7 +46,7 @@ final class ExecutionsTest extends TestCase
     public function testCreateWithOptionalParams(): void
     {
         $result = $this->client->machines->executions->create(
-            machineID: 'dm-3',
+            machineID: 'dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c',
             command: ['string'],
             cwd: 'cwd',
             env: ['foo' => 'string'],
@@ -62,8 +62,8 @@ final class ExecutionsTest extends TestCase
     public function testRetrieve(): void
     {
         $result = $this->client->machines->executions->retrieve(
-            machineID: 'dm-3',
-            executionID: 'execution_id'
+            machineID: 'dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c',
+            executionID: 'execution_id',
         );
 
         // @phpstan-ignore-next-line method.alreadyNarrowedType
@@ -74,8 +74,8 @@ final class ExecutionsTest extends TestCase
     public function testRetrieveWithOptionalParams(): void
     {
         $result = $this->client->machines->executions->retrieve(
-            machineID: 'dm-3',
-            executionID: 'execution_id'
+            machineID: 'dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c',
+            executionID: 'execution_id',
         );
 
         // @phpstan-ignore-next-line method.alreadyNarrowedType
@@ -85,7 +85,9 @@ final class ExecutionsTest extends TestCase
     #[Test]
     public function testList(): void
     {
-        $page = $this->client->machines->executions->list(machineID: 'dm-3');
+        $page = $this->client->machines->executions->list(
+            machineID: 'dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c'
+        );
 
         // @phpstan-ignore-next-line method.alreadyNarrowedType
         $this->assertInstanceOf(CursorPage::class, $page);
@@ -100,9 +102,9 @@ final class ExecutionsTest extends TestCase
     public function testListWithOptionalParams(): void
     {
         $page = $this->client->machines->executions->list(
-            machineID: 'dm-3',
+            machineID: 'dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c',
             cursor: 'cursor',
-            limit: 0
+            limit: 0,
         );
 
         // @phpstan-ignore-next-line method.alreadyNarrowedType
@@ -118,8 +120,8 @@ final class ExecutionsTest extends TestCase
     public function testDelete(): void
     {
         $result = $this->client->machines->executions->delete(
-            machineID: 'dm-3',
-            executionID: 'execution_id'
+            machineID: 'dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c',
+            executionID: 'execution_id',
         );
 
         // @phpstan-ignore-next-line method.alreadyNarrowedType
@@ -130,8 +132,8 @@ final class ExecutionsTest extends TestCase
     public function testDeleteWithOptionalParams(): void
     {
         $result = $this->client->machines->executions->delete(
-            machineID: 'dm-3',
-            executionID: 'execution_id'
+            machineID: 'dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c',
+            executionID: 'execution_id',
         );
 
         // @phpstan-ignore-next-line method.alreadyNarrowedType
@@ -142,8 +144,8 @@ final class ExecutionsTest extends TestCase
     public function testEvents(): void
     {
         $page = $this->client->machines->executions->events(
-            machineID: 'dm-3',
-            executionID: 'execution_id'
+            machineID: 'dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c',
+            executionID: 'execution_id',
         );
 
         // @phpstan-ignore-next-line method.alreadyNarrowedType
@@ -159,10 +161,10 @@ final class ExecutionsTest extends TestCase
     public function testEventsWithOptionalParams(): void
     {
         $page = $this->client->machines->executions->events(
-            machineID: 'dm-3',
+            machineID: 'dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c',
             executionID: 'execution_id',
             cursor: 'cursor',
-            limit: 0
+            limit: 0,
         );
 
         // @phpstan-ignore-next-line method.alreadyNarrowedType
@@ -178,8 +180,8 @@ final class ExecutionsTest extends TestCase
     public function testOutput(): void
     {
         $result = $this->client->machines->executions->output(
-            machineID: 'dm-3',
-            executionID: 'execution_id'
+            machineID: 'dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c',
+            executionID: 'execution_id',
         );
 
         // @phpstan-ignore-next-line method.alreadyNarrowedType
@@ -190,8 +192,8 @@ final class ExecutionsTest extends TestCase
     public function testOutputWithOptionalParams(): void
     {
         $result = $this->client->machines->executions->output(
-            machineID: 'dm-3',
-            executionID: 'execution_id'
+            machineID: 'dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c',
+            executionID: 'execution_id',
         );
 
         // @phpstan-ignore-next-line method.alreadyNarrowedType

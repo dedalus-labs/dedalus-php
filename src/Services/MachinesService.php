@@ -5,19 +5,16 @@ declare(strict_types=1);
 namespace Dedalus\Services;
 
 use Dedalus\Client;
-use Dedalus\Core\Contracts\BaseStream;
 use Dedalus\Core\Exceptions\APIException;
 use Dedalus\Core\Util;
 use Dedalus\CursorPage;
 use Dedalus\Machines\Machine;
+use Dedalus\Machines\MachineGetResponse;
 use Dedalus\Machines\MachineListItem;
 use Dedalus\RequestOptions;
 use Dedalus\ServiceContracts\MachinesContract;
-use Dedalus\Services\Machines\ArtifactsService;
 use Dedalus\Services\Machines\ExecutionsService;
-use Dedalus\Services\Machines\PreviewsService;
 use Dedalus\Services\Machines\SSHService;
-use Dedalus\Services\Machines\TerminalsService;
 
 /**
  * @phpstan-import-type RequestOpts from \Dedalus\RequestOptions
@@ -32,16 +29,6 @@ final class MachinesService implements MachinesContract
     /**
      * @api
      */
-    public ArtifactsService $artifacts;
-
-    /**
-     * @api
-     */
-    public PreviewsService $previews;
-
-    /**
-     * @api
-     */
     public SSHService $ssh;
 
     /**
@@ -50,21 +37,13 @@ final class MachinesService implements MachinesContract
     public ExecutionsService $executions;
 
     /**
-     * @api
-     */
-    public TerminalsService $terminals;
-
-    /**
      * @internal
      */
     public function __construct(private Client $client)
     {
         $this->raw = new MachinesRawService($client);
-        $this->artifacts = new ArtifactsService($client);
-        $this->previews = new PreviewsService($client);
         $this->ssh = new SSHService($client);
         $this->executions = new ExecutionsService($client);
-        $this->terminals = new TerminalsService($client);
     }
 
     /**
@@ -72,27 +51,27 @@ final class MachinesService implements MachinesContract
      *
      * Create machine
      *
+     * @param string $autosleep Idle window before autosleep. Accepts fixed duration units like 30s, 30m, 2h, 7d3h4s, or 1w3d, raw seconds ("1800"), or never to disable.
      * @param int $memoryMiB memory in MiB
      * @param int $storageGiB storage in GiB
      * @param float $vcpu CPU in vCPUs
-     * @param string $autosleep Idle window before autosleep. Accepts fixed duration units like 30s, 30m, 2h, 7d3h4s, or 1w3d, raw seconds ("1800"), or never to disable.
      * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function create(
-        int $memoryMiB,
-        int $storageGiB,
-        float $vcpu,
-        ?string $autosleep = null,
+        string $autosleep = '300s',
+        int $memoryMiB = 4096,
+        int $storageGiB = 10,
+        float $vcpu = 1,
         RequestOptions|array|null $requestOptions = null,
     ): Machine {
         $params = Util::removeNulls(
             [
+                'autosleep' => $autosleep,
                 'memoryMiB' => $memoryMiB,
                 'storageGiB' => $storageGiB,
                 'vcpu' => $vcpu,
-                'autosleep' => $autosleep,
             ],
         );
 
@@ -114,7 +93,7 @@ final class MachinesService implements MachinesContract
     public function retrieve(
         string $machineID,
         RequestOptions|array|null $requestOptions = null
-    ): Machine {
+    ): MachineGetResponse {
         $params = Util::removeNulls(['machineID' => $machineID]);
 
         // @phpstan-ignore-next-line argument.type
@@ -244,32 +223,6 @@ final class MachinesService implements MachinesContract
 
         // @phpstan-ignore-next-line argument.type
         $response = $this->raw->wake(params: $params, requestOptions: $requestOptions);
-
-        return $response->parse();
-    }
-
-    /**
-     * @api
-     *
-     * @param string $machineID path param: Machine identifier
-     * @param string $lastEventID header param: Optional resourceVersion bookmark used to resume a previous stream
-     * @param RequestOpts|null $requestOptions
-     *
-     * @return BaseStream<Machine>
-     *
-     * @throws APIException
-     */
-    public function watchStream(
-        string $machineID,
-        ?string $lastEventID = null,
-        RequestOptions|array|null $requestOptions = null,
-    ): BaseStream {
-        $params = Util::removeNulls(
-            ['machineID' => $machineID, 'lastEventID' => $lastEventID]
-        );
-
-        // @phpstan-ignore-next-line argument.type
-        $response = $this->raw->watchStream(params: $params, requestOptions: $requestOptions);
 
         return $response->parse();
     }

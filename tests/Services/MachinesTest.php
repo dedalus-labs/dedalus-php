@@ -6,6 +6,7 @@ use Dedalus\Client;
 use Dedalus\Core\Util;
 use Dedalus\CursorPage;
 use Dedalus\Machines\Machine;
+use Dedalus\Machines\MachineGetResponse;
 use Dedalus\Machines\MachineListItem;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\Attributes\Test;
@@ -32,25 +33,7 @@ final class MachinesTest extends TestCase
     #[Test]
     public function testCreate(): void
     {
-        $result = $this->client->machines->create(
-            memoryMiB: 0,
-            storageGiB: 0,
-            vcpu: 0
-        );
-
-        // @phpstan-ignore-next-line method.alreadyNarrowedType
-        $this->assertInstanceOf(Machine::class, $result);
-    }
-
-    #[Test]
-    public function testCreateWithOptionalParams(): void
-    {
-        $result = $this->client->machines->create(
-            memoryMiB: 0,
-            storageGiB: 0,
-            vcpu: 0,
-            autosleep: 'autosleep'
-        );
+        $result = $this->client->machines->create();
 
         // @phpstan-ignore-next-line method.alreadyNarrowedType
         $this->assertInstanceOf(Machine::class, $result);
@@ -59,25 +42,31 @@ final class MachinesTest extends TestCase
     #[Test]
     public function testRetrieve(): void
     {
-        $result = $this->client->machines->retrieve(machineID: 'dm-3');
+        $result = $this->client->machines->retrieve(
+            machineID: 'dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c'
+        );
 
         // @phpstan-ignore-next-line method.alreadyNarrowedType
-        $this->assertInstanceOf(Machine::class, $result);
+        $this->assertInstanceOf(MachineGetResponse::class, $result);
     }
 
     #[Test]
     public function testRetrieveWithOptionalParams(): void
     {
-        $result = $this->client->machines->retrieve(machineID: 'dm-3');
+        $result = $this->client->machines->retrieve(
+            machineID: 'dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c'
+        );
 
         // @phpstan-ignore-next-line method.alreadyNarrowedType
-        $this->assertInstanceOf(Machine::class, $result);
+        $this->assertInstanceOf(MachineGetResponse::class, $result);
     }
 
     #[Test]
     public function testUpdate(): void
     {
-        $result = $this->client->machines->update(machineID: 'dm-3');
+        $result = $this->client->machines->update(
+            machineID: 'dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c'
+        );
 
         // @phpstan-ignore-next-line method.alreadyNarrowedType
         $this->assertInstanceOf(Machine::class, $result);
@@ -87,7 +76,7 @@ final class MachinesTest extends TestCase
     public function testUpdateWithOptionalParams(): void
     {
         $result = $this->client->machines->update(
-            machineID: 'dm-3',
+            machineID: 'dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c',
             autosleep: 'autosleep',
             memoryMiB: 0,
             storageGiB: 0,
@@ -115,7 +104,9 @@ final class MachinesTest extends TestCase
     #[Test]
     public function testDelete(): void
     {
-        $result = $this->client->machines->delete(machineID: 'dm-3');
+        $result = $this->client->machines->delete(
+            machineID: 'dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c'
+        );
 
         // @phpstan-ignore-next-line method.alreadyNarrowedType
         $this->assertInstanceOf(Machine::class, $result);
@@ -124,7 +115,9 @@ final class MachinesTest extends TestCase
     #[Test]
     public function testDeleteWithOptionalParams(): void
     {
-        $result = $this->client->machines->delete(machineID: 'dm-3');
+        $result = $this->client->machines->delete(
+            machineID: 'dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c'
+        );
 
         // @phpstan-ignore-next-line method.alreadyNarrowedType
         $this->assertInstanceOf(Machine::class, $result);
@@ -133,7 +126,9 @@ final class MachinesTest extends TestCase
     #[Test]
     public function testSleep(): void
     {
-        $result = $this->client->machines->sleep(machineID: 'dm-3');
+        $result = $this->client->machines->sleep(
+            machineID: 'dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c'
+        );
 
         // @phpstan-ignore-next-line method.alreadyNarrowedType
         $this->assertInstanceOf(Machine::class, $result);
@@ -142,7 +137,9 @@ final class MachinesTest extends TestCase
     #[Test]
     public function testSleepWithOptionalParams(): void
     {
-        $result = $this->client->machines->sleep(machineID: 'dm-3');
+        $result = $this->client->machines->sleep(
+            machineID: 'dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c'
+        );
 
         // @phpstan-ignore-next-line method.alreadyNarrowedType
         $this->assertInstanceOf(Machine::class, $result);
@@ -151,7 +148,9 @@ final class MachinesTest extends TestCase
     #[Test]
     public function testWake(): void
     {
-        $result = $this->client->machines->wake(machineID: 'dm-3');
+        $result = $this->client->machines->wake(
+            machineID: 'dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c'
+        );
 
         // @phpstan-ignore-next-line method.alreadyNarrowedType
         $this->assertInstanceOf(Machine::class, $result);
@@ -160,7 +159,9 @@ final class MachinesTest extends TestCase
     #[Test]
     public function testWakeWithOptionalParams(): void
     {
-        $result = $this->client->machines->wake(machineID: 'dm-3');
+        $result = $this->client->machines->wake(
+            machineID: 'dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c'
+        );
 
         // @phpstan-ignore-next-line method.alreadyNarrowedType
         $this->assertInstanceOf(Machine::class, $result);

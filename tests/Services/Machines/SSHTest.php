@@ -32,8 +32,8 @@ final class SSHTest extends TestCase
     public function testCreate(): void
     {
         $result = $this->client->machines->ssh->create(
-            machineID: 'dm-3',
-            publicKey: 'public_key'
+            machineID: 'dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c',
+            publicKey: 'public_key',
         );
 
         // @phpstan-ignore-next-line method.alreadyNarrowedType
@@ -44,8 +44,8 @@ final class SSHTest extends TestCase
     public function testCreateWithOptionalParams(): void
     {
         $result = $this->client->machines->ssh->create(
-            machineID: 'dm-3',
-            publicKey: 'public_key'
+            machineID: 'dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c',
+            publicKey: 'public_key',
         );
 
         // @phpstan-ignore-next-line method.alreadyNarrowedType
@@ -56,8 +56,8 @@ final class SSHTest extends TestCase
     public function testRetrieve(): void
     {
         $result = $this->client->machines->ssh->retrieve(
-            machineID: 'dm-3',
-            sessionID: 'session_id'
+            machineID: 'dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c',
+            sessionID: 'session_id',
         );
 
         // @phpstan-ignore-next-line method.alreadyNarrowedType
@@ -68,8 +68,8 @@ final class SSHTest extends TestCase
     public function testRetrieveWithOptionalParams(): void
     {
         $result = $this->client->machines->ssh->retrieve(
-            machineID: 'dm-3',
-            sessionID: 'session_id'
+            machineID: 'dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c',
+            sessionID: 'session_id',
         );
 
         // @phpstan-ignore-next-line method.alreadyNarrowedType
@@ -79,7 +79,9 @@ final class SSHTest extends TestCase
     #[Test]
     public function testList(): void
     {
-        $page = $this->client->machines->ssh->list(machineID: 'dm-3');
+        $page = $this->client->machines->ssh->list(
+            machineID: 'dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c'
+        );
 
         // @phpstan-ignore-next-line method.alreadyNarrowedType
         $this->assertInstanceOf(CursorPage::class, $page);
@@ -94,9 +96,9 @@ final class SSHTest extends TestCase
     public function testListWithOptionalParams(): void
     {
         $page = $this->client->machines->ssh->list(
-            machineID: 'dm-3',
+            machineID: 'dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c',
             cursor: 'cursor',
-            limit: 0
+            limit: 0,
         );
 
         // @phpstan-ignore-next-line method.alreadyNarrowedType
@@ -112,8 +114,8 @@ final class SSHTest extends TestCase
     public function testDelete(): void
     {
         $result = $this->client->machines->ssh->delete(
-            machineID: 'dm-3',
-            sessionID: 'session_id'
+            machineID: 'dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c',
+            sessionID: 'session_id',
         );
 
         // @phpstan-ignore-next-line method.alreadyNarrowedType
@@ -124,8 +126,8 @@ final class SSHTest extends TestCase
     public function testDeleteWithOptionalParams(): void
     {
         $result = $this->client->machines->ssh->delete(
-            machineID: 'dm-3',
-            sessionID: 'session_id'
+            machineID: 'dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c',
+            sessionID: 'session_id',
         );
 
         // @phpstan-ignore-next-line method.alreadyNarrowedType

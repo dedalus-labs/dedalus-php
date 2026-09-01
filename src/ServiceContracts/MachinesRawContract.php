@@ -5,19 +5,18 @@ declare(strict_types=1);
 namespace Dedalus\ServiceContracts;
 
 use Dedalus\Core\Contracts\BaseResponse;
-use Dedalus\Core\Contracts\BaseStream;
 use Dedalus\Core\Exceptions\APIException;
 use Dedalus\CursorPage;
 use Dedalus\Machines\Machine;
 use Dedalus\Machines\MachineCreateParams;
 use Dedalus\Machines\MachineDeleteParams;
+use Dedalus\Machines\MachineGetResponse;
 use Dedalus\Machines\MachineListItem;
 use Dedalus\Machines\MachineListParams;
 use Dedalus\Machines\MachineRetrieveParams;
 use Dedalus\Machines\MachineSleepParams;
 use Dedalus\Machines\MachineUpdateParams;
 use Dedalus\Machines\MachineWakeParams;
-use Dedalus\Machines\MachineWatchParams;
 use Dedalus\RequestOptions;
 
 /**
@@ -46,7 +45,7 @@ interface MachinesRawContract
      * @param array<string,mixed>|MachineRetrieveParams $params
      * @param RequestOpts|null $requestOptions
      *
-     * @return BaseResponse<Machine>
+     * @return BaseResponse<MachineGetResponse>
      *
      * @throws APIException
      */
@@ -127,21 +126,6 @@ interface MachinesRawContract
      */
     public function wake(
         array|MachineWakeParams $params,
-        RequestOptions|array|null $requestOptions = null,
-    ): BaseResponse;
-
-    /**
-     * @api
-     *
-     * @param array<string,mixed>|MachineWatchParams $params
-     * @param RequestOpts|null $requestOptions
-     *
-     * @return BaseResponse<BaseStream<Machine>>
-     *
-     * @throws APIException
-     */
-    public function watchStream(
-        array|MachineWatchParams $params,
         RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 }

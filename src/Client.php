@@ -8,7 +8,6 @@ use Dedalus\Core\BaseClient;
 use Dedalus\Core\Implementation\StreamingHttpClient;
 use Dedalus\Core\Util;
 use Dedalus\Services\MachinesService;
-use Dedalus\Services\UsageService;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Discovery\Psr18ClientDiscovery;
 
@@ -23,11 +22,6 @@ class Client extends BaseClient
     public string $xAPIKey;
 
     public string $dedalusOrgID;
-
-    /**
-     * @api
-     */
-    public UsageService $usage;
 
     /**
      * @api
@@ -100,7 +94,6 @@ class Client extends BaseClient
             idempotencyHeader: 'Idempotency-Key'
         );
 
-        $this->usage = new UsageService($this);
         $this->machines = new MachinesService($this);
     }
 
